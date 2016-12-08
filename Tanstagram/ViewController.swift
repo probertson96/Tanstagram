@@ -8,18 +8,32 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIGestureRecognizerDelegate {
+    
+    @IBOutlet var images: [UIImageView]!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        createGestures()
+        
+
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func pinchGesture(imageView: UIImageView) -> UIPinchGestureRecognizer {
+        return UIPinchGestureRecognizer(target: self, action: #selector(ViewController.handlePinch))
     }
-
-
+    
+    func handlePinch(sender: UIPinchGestureRecognizer) {
+        sender.view?.transform = (sender.view?.transform)!.scaledBy(x: sender.scale, y: sender.scale)
+        sender.scale = 1
+    }
+    
+    func createGestures() {
+        for shape in images {
+            let pinch = pinchGesture(imageView: shape)
+            shape.addGestureRecognizer(pinch)
+        }
+    }
 }
 
